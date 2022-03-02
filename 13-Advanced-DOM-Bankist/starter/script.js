@@ -29,6 +29,93 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
+const header = document.querySelector('.header');
+const allSections = document.querySelectorAll('.section');
+const allButtons = document.getElementsByTagName('button');
+
+const message = document.createElement('div');
+message.classList.add('cookie-message');
+message.innerHTML =
+  'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
+header.prepend(message);
+document
+  .querySelector('.btn--close-cookie')
+  .addEventListener('click', function () {
+    message.remove();
+  });
+
+message.style.backgroundColor = '#37383d';
+message.style.width = '120%';
+logo.setAttribute('company', 'Bankist'); // Sets 'company' to 'Bankist'
+
+///////////////////////////////////////////////////////////
+// VIDEO187: Styles, Attributes, Classes
+/*
+////// Styles //////
+
+// Setting inline styles using .style
+message.style.backgroundColor = '#37383d';
+message.style.width = '120%';
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 40 + 'px';
+const logo = document.querySelector('.nav__logo');
+
+// Setting a style using .setProperty()
+// message.style.setProperty('background-color', 'blue');
+
+// Getting a style from the DOM
+// .style will let us read inline styles only. No styles from CSS files
+console.log(getComputedStyle(message).color);
+console.log(getComputedStyle(message).height);
+
+// Setting a style after we find it in the DOM
+// parseFloat strips the 'px' from the read property, then we add it back on
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 40 + 'px';
+
+// CSS Custom Properties (CSS Variables)
+// We can change the CSS custom properties of our css file using .setProperty()
+// document.documentElement.style.setProperty('--color-primary', 'orangered');
+
+////// Attributes //////
+// We can read the standard attributes of DOM elements using their name as a method
+const logo = document.querySelector('.nav__logo');
+
+// Standard
+console.log(logo.alt); // Returns the alt value
+console.log(logo.src); // Returns the absolute src value
+console.log(logo.className); // Returns the class value
+
+logo.alt = 'Beautiful logo'; // Set alt to 'Beautiful logo'
+console.log(logo.getAttribute('src')); // Returns relative value for src
+
+// Non-standard
+console.log(logo.designer); // Does not work, designer is not a standard attr
+console.log(logo.getAttribute('designer')); // Returns 'Jonas'
+logo.setAttribute('company', 'Bankist'); // Sets 'company' to 'Bankist'
+
+// Use getAttribute for all links and paths, such as for image sources or hyperlinks
+
+////// Data Attributes //////
+// Useful for storing data in the HTML and user interface
+
+// .dataset
+// Reads data attribute of the DOM element that invokes it
+// Data attribute naming convention in the HTML file is kebab-case
+// Follow the word data with the name of the data attribute you want: data-name
+// HTML Name Example: data-version-number
+// Use camelCase to call attribute: logo.dataset.versionNumber
+console.log(logo.dataset.versionNumber);
+
+////// Classes //////
+logo.classList.add('c', 'blah');
+logo.classList.remove('c');
+logo.classList.toggle('c');
+logo.classList.contains('c');
+
+// DO NOT USE. Overrides all existing classes on the DOM element
+// logo.className = 'jonas';
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO186: Selecting, Creating, and Deleting Elements
