@@ -1,13 +1,19 @@
 'use strict';
 
-///////////////////////////////////////
-// Modal window
-
+///////////////////////////////////////////////////////////
+// DOM Elements
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const header = document.querySelector('.header');
+const allSections = document.querySelectorAll('.section');
+const allButtons = document.getElementsByTagName('button');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
 
+///////////////////////////////////////////////////////////
+// Modal window
 const openModal = function (event) {
   event.preventDefault();
   modal.classList.remove('hidden');
@@ -29,31 +35,59 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
-const header = document.querySelector('.header');
-const allSections = document.querySelectorAll('.section');
-const allButtons = document.getElementsByTagName('button');
 
-const message = document.createElement('div');
-message.classList.add('cookie-message');
-message.innerHTML =
-  'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
-header.prepend(message);
-document
-  .querySelector('.btn--close-cookie')
-  .addEventListener('click', function () {
-    message.remove();
-  });
-
-message.style.backgroundColor = '#37383d';
-message.style.width = '120%';
-logo.setAttribute('company', 'Bankist'); // Sets 'company' to 'Bankist'
+///////////////////////////////////////////////////////////
+// Page Navigation
+// Nav Links
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
 
 // Scrolling to #section--1
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
 btnScrollTo.addEventListener('click', function (e) {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
+
+///////////////////////////////////////////////////////////
+// VIDEO192: Event Delegation: Implementing Page Navigation
+/*
+// Page navigation
+// Enabling smooth delegation on all nav links
+
+// Via a function on each target
+// Not efficient, a callback function is created for each link
+// document.querySelectorAll('.nav__link').forEach(function (el) {
+//   el.addEventListener('click', function (e) {
+//     // Prevent behavior of navigating to the anchor id of the element
+//     e.preventDefault();
+//     // Getting the href of the element
+//     const id = this.getAttribute('href');
+//     // Selecting the id and scrolling to it
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//   });
+// });
+
+// Via event delegation
+// More efficient, only one callback function is needed on the common parent
+// Step 1: Add event listener to common parent element of target
+// Step 2: Determine what element originated the event (the target)
+// Step 3: Match, only perform actions on the targets we want
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  // Prevent behavior of navigating to the anchor id of the element
+  e.preventDefault();
+  // Determine the target using e.target, then match the target based on a class name
+  if (e.target.classList.contains('nav__link')) {
+    // Getting the href of the element
+    const id = e.target.getAttribute('href');
+    // Selecting the id and scrolling to it
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO191: Event Propagation: Bubbling and Capturing
