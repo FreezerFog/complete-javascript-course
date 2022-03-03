@@ -53,7 +53,67 @@ btnScrollTo.addEventListener('click', function (e) {
 });
 
 ///////////////////////////////////////////////////////////
+// Tabbed Components
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (event) {
+  const clicked = event.target.closest('.operations__tab');
+  if (!clicked) return;
+
+  // Remove active classes
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
+  tabsContent.forEach(content =>
+    content.classList.remove('operations__content--active')
+  );
+
+  // Activate tab and content area
+  clicked.classList.add('operations__tab--active');
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+
+///////////////////////////////////////////////////////////
+// VIDEO194: Building a Tabbed Component
+/*
+////// Tabbed Component ///////
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (event) {
+  // Need to work around the span tag inside the operations tab
+  // We identify the closest operations tab to ensure that our HTML element
+  // is an operations tab, no matter if we click on the span or the tab
+  const clicked = event.target.closest('.operations__tab');
+
+  // Guard clause, modern way of avoiding null issues
+  if (!clicked) return;
+
+  // Traditional way of avoiding a null error
+  // if (clicked) {
+  //   clicked.classList.add('operations__tab--active');
+  // }
+
+  // Remove active classes
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
+  tabsContent.forEach(content =>
+    content.classList.remove('operations__content--active')
+  );
+
+  // Activate tab and content area
+  clicked.classList.add('operations__tab--active');
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+*/
+
+///////////////////////////////////////////////////////////
 // VIDEO193: DOM Traversing
+/*
 const h1 = document.querySelector('h1');
 
 ////// Going downwards: children //////
@@ -129,6 +189,7 @@ function changeScale(el) {
   el.style.transform = 'scale(0.8)';
 }
 affectSiblings(h1, changeScale);
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO192: Event Delegation: Implementing Page Navigation
