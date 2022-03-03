@@ -11,6 +11,10 @@ const allSections = document.querySelectorAll('.section');
 const allButtons = document.getElementsByTagName('button');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+const nav = document.querySelector('.nav');
 
 ///////////////////////////////////////////////////////////
 // Modal window
@@ -54,10 +58,6 @@ btnScrollTo.addEventListener('click', function (e) {
 
 ///////////////////////////////////////////////////////////
 // Tabbed Components
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 tabsContainer.addEventListener('click', function (event) {
   const clicked = event.target.closest('.operations__tab');
   if (!clicked) return;
@@ -74,6 +74,86 @@ tabsContainer.addEventListener('click', function (event) {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+////// Menu Fade Animation //////
+function handleHover(event, opacity) {
+  if (event.target.classList.contains('nav__link')) {
+    const link = event.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== link) {
+        el.style.opacity = opacity;
+      }
+      logo.style.opacity = opacity;
+    });
+  }
+}
+
+nav.addEventListener('mouseover', function (event) {
+  handleHover(event, 0.5);
+});
+
+nav.addEventListener('mouseout', function (event) {
+  handleHover(event, 1);
+});
+
+///////////////////////////////////////////////////////////
+// VIDEO195: Passing Arguments to Event Handlers
+/*
+////// Menu fade animation //////
+// mouseover & mouseout bubble, allowing for event propagation
+// mouseenter & mouseleave do not bubble
+
+// function handleHover(event, opacity) {
+//   if (event.target.classList.contains('nav__link')) {
+//     const link = event.target;
+//     const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+//     const logo = link.closest('.nav').querySelector('img');
+
+//     siblings.forEach(el => {
+//       if (el !== link) {
+//         el.style.opacity = opacity;
+//       }
+//       logo.style.opacity = opacity;
+//     });
+//   }
+// }
+
+// nav.addEventListener('mouseover', function (event) {
+//   handleHover(event, 0.5);
+// });
+
+// nav.addEventListener('mouseout', function (event) {
+//   handleHover(event, 1);
+// });
+
+////// Passing "argument" into handler //////
+// Use bind to place a function with an argurment in the eventListener callback function
+// Alternative to above, where we had to call handleHover in the callback function
+
+// Bind sets 'this' keyword to the provided value
+// nav.addEventListener('mouseover', handleHover.bind(0.5));
+// nav.addEventListener('mouseout', handleHover.bind(1));
+
+// The function in the eventListener callback still gets access to the event value
+// due to being a parameter of the eventListener function
+// function handleHover(event) {
+//   if (event.target.classList.contains('nav__link')) {
+//     const link = event.target;
+//     const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+//     const logo = link.closest('.nav').querySelector('img');
+
+//     siblings.forEach(el => {
+//       if (el !== link) {
+//         el.style.opacity = this;
+//       }
+//       logo.style.opacity = this;
+//     });
+//   }
+// }
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO194: Building a Tabbed Component
