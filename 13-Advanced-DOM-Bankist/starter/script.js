@@ -48,6 +48,44 @@ message.style.backgroundColor = '#37383d';
 message.style.width = '120%';
 logo.setAttribute('company', 'Bankist'); // Sets 'company' to 'Bankist'
 
+// Scrolling to #section--1
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+btnScrollTo.addEventListener('click', function (e) {
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+///////////////////////////////////////////////////////////
+// VIDEO188: Implementing Smooth Scrolling
+/*
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+btnScrollTo.addEventListener('click', function (e) {
+  const s1coords = section1.getBoundingClientRect();
+  console.log(e.target.getBoundingClientRect());
+  console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
+
+  // Scrolling
+  // We add the current window offset to the coordinates of our target so that we will always have the right x/y coordinate to scroll the window to.
+
+  // Old school method
+  // Scrolling with x/y argument
+  // window.scrollTo(
+  //   s1coords.left + window.pageXOffset,
+  //   s1coords.top + window.pageYOffset
+  // );
+  // Scrolling with object argument
+  // window.scrollTo({
+  //   left: s1coords.left + window.pageXOffset,
+  //   top: s1coords.top + window.pageYOffset,
+  //   behavior: 'smooth',
+  // });
+
+  // New method, works as above
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+*/
+
 ///////////////////////////////////////////////////////////
 // VIDEO187: Styles, Attributes, Classes
 /*
