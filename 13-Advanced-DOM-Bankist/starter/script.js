@@ -56,6 +56,45 @@ btnScrollTo.addEventListener('click', function (e) {
 });
 
 ///////////////////////////////////////////////////////////
+// VIDEO191: Event Propagation: Bubbling and Capturing
+/*
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)}`;
+
+document.querySelector('.nav__link').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log('Link', e.target, e.currentTarget);
+
+  // Stopping propagation (bubbling)
+  // Generally not a good idea to use this, but it can help sometimes
+  e.stopPropagation();
+});
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log('Links Container', e.target, e.currentTarget);
+});
+
+document.querySelector('.nav').addEventListener(
+  'click',
+  function (e) {
+    this.style.backgroundColor = randomColor();
+    console.log('Nav', e.target, e.currentTarget);
+    // We can pass in a boolean third argument of true to make this event occur on the capturing phase instead of the bubbling phase
+  },
+  true
+);
+
+// e.target will show the target where the event is first called. Will be the SAME as event bubbling occurs
+// e.currentTarget will show the current target an event is called on. Will be DIFFERENT due to event bubbling
+// this & currentTarget are the same.
+//
+*/
+
+///////////////////////////////////////////////////////////
 // VIDEO189: Types of Events and Event Handlers
 /*
 const h1 = document.querySelector('h1');
