@@ -100,6 +100,22 @@ nav.addEventListener('mouseout', function (event) {
 });
 
 ///////////////////////////////////////////////////////////
+// VIDEO196: Implementing a Sticky Navigation: The Scroll Event
+/*
+////// Sticky Navigation //////
+const initialCoords = section1.getBoundingClientRect();
+console.log(initialCoords);
+window.addEventListener('scroll', function () {
+  console.log(window.scrollY);
+  if (window.scrollY > initialCoords.top) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+});
+*/
+
+///////////////////////////////////////////////////////////
 // VIDEO195: Passing Arguments to Event Handlers
 /*
 ////// Menu fade animation //////
