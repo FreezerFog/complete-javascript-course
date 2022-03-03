@@ -56,6 +56,45 @@ btnScrollTo.addEventListener('click', function (e) {
 });
 
 ///////////////////////////////////////////////////////////
+// VIDEO189: Types of Events and Event Handlers
+/*
+const h1 = document.querySelector('h1');
+const alertH1 = function (e) {
+  alert('addEventListener: Heading!');
+  removeEvent(h1, 'mouseenter', alertH1);
+};
+
+////// Adding an event listener to an element //////
+
+// .addEventListener()
+// Newer way of adding a listener
+// h1.addEventListener('mouseenter', function (e) {
+//   alert('addEventListener: Heading!');
+// });
+
+h1.addEventListener('mouseenter', alertH1);
+
+// .onmouseenter
+// Old way of adding a listener
+// h1.onmouseenter = function (e) {
+//   alert('onmouseenter: Heading!');
+// };
+
+////// Removing an event listener //////
+
+// .removeEventListener()
+// Works similarly to .addEventListener()
+// In order to remove an eventListener the event needs to have a non-anonymous function.
+// The first example of .addEventListener would not work, but the second one will because
+// we can specify the exact listener that should be removed: mouseenter & alertH1
+
+// I made this a function for reusability sake. Example of remove is inside the function
+function removeEvent(element, event, eventFunction) {
+  element.removeEventListener(event, eventFunction);
+}
+*/
+
+///////////////////////////////////////////////////////////
 // VIDEO188: Implementing Smooth Scrolling
 /*
 const btnScrollTo = document.querySelector('.btn--scroll-to');
