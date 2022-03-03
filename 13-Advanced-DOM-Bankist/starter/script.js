@@ -53,6 +53,84 @@ btnScrollTo.addEventListener('click', function (e) {
 });
 
 ///////////////////////////////////////////////////////////
+// VIDEO193: DOM Traversing
+const h1 = document.querySelector('h1');
+
+////// Going downwards: children //////
+// .querySelector() & .querySelectorAll()
+// Searches for matching children no matter how descendant they are
+// Does not search parents or siblings
+console.log(h1.querySelectorAll('.highlight'));
+
+// .childNodes
+// Gives all child nodes
+console.log(h1.childNodes);
+
+// .children
+// Gives an HTML collection of the direct children (no grandkids)
+console.log(h1.children);
+
+// .firstElementChild & .lastElementChild
+// Access either the first or last child of the parent we call it on
+h1.firstElementChild.style.color = 'blue';
+h1.lastElementChild.style.color = 'red';
+
+////// Going upwards: parents //////
+// .parentNode
+// Gives the direct parent Node
+console.log(h1.parentNode);
+
+// .parentElement
+// Gives the direct parent element
+console.log(h1.parentElement);
+
+// .closest()
+// Returns nearest element matching argument string
+// Will travel up parents to look for a match
+// Will return itself if it matches the string
+h1.closest('.header').style.background = 'var(--gradient-secondary)';
+h1.closest('h1').style.background = 'var(--gradient-primary)';
+
+////// Sideways: siblings //////
+// The standard methods are only able to access direct siblings (previous or next), but there is a workaround
+// Sibling Elements
+console.log(h1.previousElementSibling);
+console.log(h1.nextElementSibling);
+
+// Sibling Nodes
+console.log(h1.previousSibling);
+console.log(h1.nextSibling);
+
+// Workaround to accessing all siblings
+// Navigate up to the parent, then call .children or .childNodes
+// Will return all children, including the element you navigated from
+console.log(h1.parentElement.children);
+
+// Practice for changing all siblings and excluding the original element
+// Step 1: Spread the HTMLCollection into an array
+// Step 2: Loop through each element
+// Step 3: Perform comparison as needed, and do work as needed
+// [...h1.parentElement.children].forEach(function (el) {
+//   if (el !== h1) {
+//     el.style.transform = 'scale(0.5)';
+//   }
+// });
+
+// My Practice: Make a function that performs a passed in function to all siblings
+function affectSiblings(element, desiredFunc) {
+  [...element.parentElement.children].forEach(function (el) {
+    if (el !== element) {
+      // el.style.transform = 'scale(0.5)';
+      desiredFunc(el);
+    }
+  });
+}
+function changeScale(el) {
+  el.style.transform = 'scale(0.8)';
+}
+affectSiblings(h1, changeScale);
+
+///////////////////////////////////////////////////////////
 // VIDEO192: Event Delegation: Implementing Page Navigation
 /*
 // Page navigation
