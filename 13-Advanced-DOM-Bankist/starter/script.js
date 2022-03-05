@@ -16,6 +16,9 @@ const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
 const imgTargets = document.querySelectorAll('img[data-src]');
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
 
 ///////////////////////////////////////////////////////////
 // Modal window
@@ -155,6 +158,71 @@ const imgObserver = new IntersectionObserver(loadImg, {
 });
 
 imgTargets.forEach(img => imgObserver.observe(img));
+
+////// Slider Component //////
+let currentSlide = 0;
+const maxSlide = slides.length - 1;
+
+function goToSlide(slide) {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${(i - slide) * 100}%)`)
+  );
+}
+
+function nextSlide() {
+  currentSlide = currentSlide === maxSlide ? 0 : currentSlide + 1;
+  goToSlide(currentSlide);
+}
+
+function previousSlide() {
+  currentSlide = currentSlide === 0 ? maxSlide : currentSlide - 1;
+  goToSlide(currentSlide);
+}
+
+// Set Starting Slide
+goToSlide(0);
+
+// Go To Next Slide
+btnRight.addEventListener('click', nextSlide);
+
+// Go To Previous Slide
+btnLeft.addEventListener('click', previousSlide);
+
+///////////////////////////////////////////////////////////
+// VIDEO200: Building a Slider Component: Part 1
+/*
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+
+let currentSlide = 0;
+const maxSlide = slides.length - 1;
+
+function goToSlide(slide) {
+  slides.forEach(
+    (slide, index) =>
+      (slide.style.transform = `translateX(${(index - currentSlide) * 100}%)`)
+  );
+}
+
+goToSlide(0);
+
+function nextSlide() {
+  currentSlide = currentSlide === maxSlide ? 0 : currentSlide + 1;
+  goToSlide(currentSlide);
+}
+
+function previousSlide() {
+  currentSlide = currentSlide === 0 ? maxSlide : currentSlide - 1;
+  goToSlide(currentSlide);
+}
+
+// Next Slide
+btnRight.addEventListener('click', nextSlide);
+
+// Previous Slide
+btnLeft.addEventListener('click', previousSlide);
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO199: Lazy Loading Images
