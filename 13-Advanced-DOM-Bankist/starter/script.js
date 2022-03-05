@@ -232,13 +232,32 @@ function slider() {
   dotContainer.addEventListener('click', function (e) {
     if (e.target.classList.contains('dots__dot')) {
       const { slide } = e.target.dataset;
-      console.log(slide);
       goToSlide(slide);
       activateDot(slide);
     }
   });
 }
 slider();
+
+///////////////////////////////////////////////////////////
+// VIDEO202: Lifecycle DOM Events
+
+// DOMContentLoaded does not wait for images or other external resources to load
+document.addEventListener('DOMContentLoaded', function (event) {
+  console.log('YEA', event);
+});
+
+// Runs when the page fully loads
+window.addEventListener('load', function (event) {
+  console.log('Page fully loaded', event);
+});
+
+// Pop up when you try to leave a page. Before the page ends the code runs
+// window.addEventListener('beforeunload', function (event) {
+//   event.preventDefault();
+//   console.log('Do you want to leave', event);
+//   event.returnValue = '';
+// });
 
 ///////////////////////////////////////////////////////////
 // VIDEO200: Building a Slider Component: Part 1
