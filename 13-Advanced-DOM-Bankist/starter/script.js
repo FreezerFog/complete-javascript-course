@@ -15,6 +15,7 @@ const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
+const imgTargets = document.querySelectorAll('img[data-src]');
 
 ///////////////////////////////////////////////////////////
 // Modal window
@@ -115,7 +116,7 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 });
 headerObserver.observe(header);
 
-////// Revealing Sections //////
+////// Revealing Site Sections //////
 const revealSection = function (entries, observer) {
   const [entry] = entries;
 
@@ -133,6 +134,55 @@ allSections.forEach(function (section) {
   sectionObserver.observe(section);
   section.classList.add('section--hidden');
 });
+
+////// Lazy Loading Feature Images //////
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+
+  entry.target.src = entry.target.dataset.src;
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+  observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
+
+///////////////////////////////////////////////////////////
+// VIDEO199: Lazy Loading Images
+/*
+////// Lazy Loading Images //////
+// Select all images with a data-src property
+const imgTargets = document.querySelectorAll('img[data-src]');
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+  // Replace src with data-src
+  entry.target.src = entry.target.dataset.src;
+
+  // Remove our blur effect only AFTER the good image has loaded
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  // Stop observing the image now that we're done with it
+  observer.unobserve(entry.target);
+};
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+});
+imgTargets.forEach(img => imgObserver.observe(img));
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO198: Revealing Elements on Scroll
