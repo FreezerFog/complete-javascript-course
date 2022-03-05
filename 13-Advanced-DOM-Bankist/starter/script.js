@@ -241,7 +241,7 @@ slider();
 
 ///////////////////////////////////////////////////////////
 // VIDEO202: Lifecycle DOM Events
-
+/*
 // DOMContentLoaded does not wait for images or other external resources to load
 document.addEventListener('DOMContentLoaded', function (event) {
   console.log('YEA', event);
@@ -258,6 +258,7 @@ window.addEventListener('load', function (event) {
 //   console.log('Do you want to leave', event);
 //   event.returnValue = '';
 // });
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO200: Building a Slider Component: Part 1
