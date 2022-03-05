@@ -16,9 +16,6 @@ const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
 const imgTargets = document.querySelectorAll('img[data-src]');
-const slides = document.querySelectorAll('.slide');
-const btnLeft = document.querySelector('.slider__btn--left');
-const btnRight = document.querySelector('.slider__btn--right');
 
 ///////////////////////////////////////////////////////////
 // Modal window
@@ -160,33 +157,88 @@ const imgObserver = new IntersectionObserver(loadImg, {
 imgTargets.forEach(img => imgObserver.observe(img));
 
 ////// Slider Component //////
-let currentSlide = 0;
-const maxSlide = slides.length - 1;
+function slider() {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const dotContainer = document.querySelector('.dots');
 
-function goToSlide(slide) {
-  slides.forEach(
-    (s, i) => (s.style.transform = `translateX(${(i - slide) * 100}%)`)
-  );
+  let currentSlide = 0;
+  const maxSlide = slides.length - 1;
+
+  init();
+
+  ////// Functions //////
+  function init() {
+    // Set Starting Slide
+    goToSlide(0);
+    // Create Dots
+    createDots();
+    // Set Starting Dot
+    activateDot(0);
+  }
+
+  function goToSlide(slide) {
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${(i - slide) * 100}%)`)
+    );
+  }
+
+  function nextSlide() {
+    currentSlide = currentSlide === maxSlide ? 0 : currentSlide + 1;
+    goToSlide(currentSlide);
+    activateDot(currentSlide);
+  }
+
+  function previousSlide() {
+    currentSlide = currentSlide === 0 ? maxSlide : currentSlide - 1;
+    goToSlide(currentSlide);
+    activateDot(currentSlide);
+  }
+
+  function createDots() {
+    slides.forEach(function (_, i) {
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
+  }
+
+  function activateDot(slide) {
+    document
+      .querySelectorAll('.dots__dot')
+      .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add('dots__dot--active');
+  }
+
+  ////// Event Listeners //////
+  // Go To Next Slide
+  btnRight.addEventListener('click', nextSlide);
+
+  // Go To Previous Slide
+  btnLeft.addEventListener('click', previousSlide);
+
+  // Navigate Slider Using Keys
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') previousSlide();
+    if (e.key === 'ArrowRight') nextSlide();
+  });
+
+  // Select Slide Using Dots
+  dotContainer.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dots__dot')) {
+      const { slide } = e.target.dataset;
+      console.log(slide);
+      goToSlide(slide);
+      activateDot(slide);
+    }
+  });
 }
-
-function nextSlide() {
-  currentSlide = currentSlide === maxSlide ? 0 : currentSlide + 1;
-  goToSlide(currentSlide);
-}
-
-function previousSlide() {
-  currentSlide = currentSlide === 0 ? maxSlide : currentSlide - 1;
-  goToSlide(currentSlide);
-}
-
-// Set Starting Slide
-goToSlide(0);
-
-// Go To Next Slide
-btnRight.addEventListener('click', nextSlide);
-
-// Go To Previous Slide
-btnLeft.addEventListener('click', previousSlide);
+slider();
 
 ///////////////////////////////////////////////////////////
 // VIDEO200: Building a Slider Component: Part 1
