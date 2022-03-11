@@ -55,3 +55,18 @@ console.log(matilda.species);
 console.log(jonas);
 console.log(jonas.hasOwnProperty('firstName')); // True
 console.log(jonas.hasOwnProperty('species')); // False
+
+const arr = [3, 9, 122, 5, 10, 5, 5, 17, 9];
+// Can see all properties and methods of the Array prototype, which is where all
+// of our handy array methods come from
+console.log(arr.__proto__);
+console.log(arr.__proto__ === Array.prototype);
+
+// Extending the standard Array prototype with a new function
+// Not recommended to do this
+Array.prototype.unique = function () {
+  return [...new Set(this)];
+};
+console.log(arr.unique());
+
+const h1 = document.querySelector('h1');
