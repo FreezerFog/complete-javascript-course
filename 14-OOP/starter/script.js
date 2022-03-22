@@ -1,5 +1,40 @@
 'use strict';
 
+///////////////////////////////////////////////////////////
+// VIDEO213 ES6 Classes
+
+// Class Declarations
+class PersonCl {
+  // Required
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  // Methods will be added to .prototype property
+  calcAge() {
+    console.log(2022 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+}
+
+// Adding a method to a prototype works with ES6 classes
+// PersonCl.prototype.greet = function () {
+//   console.log(`Hey ${this.firstName}`);
+// };
+
+// Class Expression
+// Classes in JS are just a type of function, so class expressions work
+// const PersonCl = class {};
+
+const jessica = new PersonCl('Jessica', 1996);
+console.log(jessica);
+jessica.calcAge();
+jessica.greet();
+
 // Only difference between normal function and constructor function is the use of the 'new' operator
 
 function Person(firstName, birthYear) {
