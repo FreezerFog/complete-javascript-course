@@ -32,11 +32,40 @@ class PersonCl {
   greet() {
     console.log(`Hey ${this.firstName}`);
   }
+
+  // Static method
+  static hey() {
+    console.log('Hey There');
+    console.log(this);
+  }
 }
+
+const jonas = new PersonCl('');
+const jessica = new PersonCl('Jessica Davis', 1996);
+
+///////////////////////////////////////////////////////////
+// VIDEO215 Static Methods
+
+// Static methods are usually used as a helper with certain constructors
+// Array.from() is not an array method, but is used with a constructor to make arrays
+// Number.parseFloat() is not a number method, but is used to make a number
+
+// Adding hey() static method to a constructor function
+// hey() is static method on PersonCl
+// PersonCl.hey = function () {
+//   console.log('Hey there!');
+// };
+// PersonCl.hey();
+// // hey() is not inherited by jonas' prototype
+// jonas.hey(); // Returns error
+
+// Adding hey() to class is done in the PersonCL class above
+PersonCl.hey();
+// jessica.hey();
 
 ///////////////////////////////////////////////////////////
 // VIDEO214 Setters and Getters
-
+/*
 const account = {
   owner: 'Jonas',
   movements: [200, 530, 120, 300],
@@ -59,6 +88,7 @@ console.log(jessica.age);
 
 const walter = new PersonCl('Walter White', 1978);
 console.log(walter);
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO213 ES6 Classes
@@ -171,4 +201,12 @@ Array.prototype.unique = function () {
 console.log(arr.unique());
 
 const h1 = document.querySelector('h1');
+
+// hey() is static method on PersonCl
+PersonCl.hey = function () {
+  console.log('Hey there!');
+};
+PersonCl.hey();
+// hey() is not inherited by jonas' prototype
+jonas.hey(); // Returns error
 */
