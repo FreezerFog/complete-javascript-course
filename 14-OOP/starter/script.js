@@ -15,14 +15,13 @@ class PersonCl {
   // Setting a property that already exists
   // Need to use a new variable name in order to avoid naming conflict with the
   // constructor method. The convention for this is to use a '_' prefix
-  set fullName(name) {
-    if (name.includes(' ')) this._fullName = name;
-    else alert(`${name} is not a full name!`);
-  }
-
-  get fullName() {
-    return this._fullName;
-  }
+  // set fullName(name) {
+  //   if (name.includes(' ')) this._fullName = name;
+  //   else alert(`${name} is not a full name!`);
+  // }
+  // get fullName() {
+  //   return this._fullName;
+  // }
 
   // Methods will be added to .prototype property
   calcAge() {
@@ -44,6 +43,35 @@ const jonas = new PersonCl('');
 const jessica = new PersonCl('Jessica Davis', 1996);
 
 ///////////////////////////////////////////////////////////
+// VIDEO215 Object.create()
+
+// Object.create allows us to manually assign a prototype to an object, as well as to create a new object from scratch
+// Completely different from constructor functions and constructor methods
+// Done using an object literal
+// Least used way to do prototypal inheritance
+// It is very useful for creating class inheritances using prototype linking
+const PersonProto = {
+  calcAge() {
+    console.log(2022 - this.birthYear);
+  },
+  // Not required, but gives us option to set properties using function
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+steven.name = 'Steven';
+steven.birthYear = 2002;
+steven.calcAge();
+// console.log(steven.__proto__);
+const sarah = Object.create(PersonProto);
+sarah.init('Sarah', 1987);
+sarah.calcAge();
+console.log(sarah);
+
+///////////////////////////////////////////////////////////
 // VIDEO215 Static Methods
 
 // Static methods are usually used as a helper with certain constructors
@@ -60,7 +88,7 @@ const jessica = new PersonCl('Jessica Davis', 1996);
 // jonas.hey(); // Returns error
 
 // Adding hey() to class is done in the PersonCL class above
-PersonCl.hey();
+// PersonCl.hey();
 // jessica.hey();
 
 ///////////////////////////////////////////////////////////
