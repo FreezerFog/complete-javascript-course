@@ -1,14 +1,27 @@
 'use strict';
 
-///////////////////////////////////////////////////////////
-// VIDEO213 ES6 Classes
-
-// Class Declarations
 class PersonCl {
   // Required
-  constructor(firstName, birthYear) {
-    this.firstName = firstName;
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
     this.birthYear = birthYear;
+  }
+
+  // Getters
+  get age() {
+    return 2022 - this.birthYear;
+  }
+
+  // Setting a property that already exists
+  // Need to use a new variable name in order to avoid naming conflict with the
+  // constructor method. The convention for this is to use a '_' prefix
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  get fullName() {
+    return this._fullName;
   }
 
   // Methods will be added to .prototype property
@@ -21,6 +34,55 @@ class PersonCl {
   }
 }
 
+///////////////////////////////////////////////////////////
+// VIDEO214 Setters and Getters
+
+const account = {
+  owner: 'Jonas',
+  movements: [200, 530, 120, 300],
+
+  get latest() {
+    return this.movements.slice(-1).pop();
+  },
+
+  set latest(move) {
+    this.movements.push(move);
+  },
+};
+
+console.log(account.latest);
+account.latest = 777;
+console.log(account.movements);
+
+const jessica = new PersonCl('Jessica Davis', 1996);
+console.log(jessica.age);
+
+const walter = new PersonCl('Walter White', 1978);
+console.log(walter);
+
+///////////////////////////////////////////////////////////
+// VIDEO213 ES6 Classes
+/*
+// Class Declarations
+// class PersonCl {
+//   // Required
+//   constructor(firstName, birthYear) {
+//     this.firstName = firstName;
+//     this.birthYear = birthYear;
+//   }
+
+//   // Getters
+//   get age() {
+//     return 2022 - this.birthYear;
+//   }
+
+//   // Methods will be added to .prototype property
+//   calcAge() {
+//     console.log(2022 - this.birthYear);
+//   }
+
+// }
+
 // Adding a method to a prototype works with ES6 classes
 // PersonCl.prototype.greet = function () {
 //   console.log(`Hey ${this.firstName}`);
@@ -30,11 +92,15 @@ class PersonCl {
 // Classes in JS are just a type of function, so class expressions work
 // const PersonCl = class {};
 
-const jessica = new PersonCl('Jessica', 1996);
+// const jessica = new PersonCl('Jessica', 1996);
 console.log(jessica);
 jessica.calcAge();
 jessica.greet();
+*/
 
+///////////////////////////////////////////////////////////
+// VIDEO208 - VIDEO211 Constructor Functions - Prototypes - Prototypal Inheritance
+/*
 // Only difference between normal function and constructor function is the use of the 'new' operator
 
 function Person(firstName, birthYear) {
@@ -105,3 +171,4 @@ Array.prototype.unique = function () {
 console.log(arr.unique());
 
 const h1 = document.querySelector('h1');
+*/
