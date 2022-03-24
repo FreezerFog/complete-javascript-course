@@ -38,6 +38,54 @@ const jonas = new PersonCl('Jonas Schmedtmann', 1991);
 const jessica = new PersonCl('Jessica Davis', 1996);
 
 ///////////////////////////////////////////////////////////
+// VIDEO222 Another Class Example
+class Account {
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.pin = pin;
+    this.movements = [];
+    this.locale = navigator.language;
+
+    console.log(`Thanks for opening an accout, ${owner}`);
+  }
+
+  // Public interface of our objects
+  // A.k.a an API
+  deposit(amount) {
+    this.movements.push(amount);
+  }
+
+  withdraw(amount) {
+    this.deposit(-amount);
+  }
+
+  approveLoan(amount) {
+    return true;
+  }
+
+  requestLoan(amount) {
+    if (this.approveLoan(amount)) {
+      this.deposit(amount);
+      console.log('Loan Approved!');
+    }
+  }
+
+  balance() {
+    return this.movements.reduce((prev, curr) => prev + curr, 0);
+  }
+}
+
+const acc1 = new Account('Jonas', 'EUR', 1111);
+console.log(acc1);
+
+acc1.deposit(250);
+acc1.withdraw(140);
+console.log(acc1.balance());
+acc1.requestLoan(500);
+console.log(acc1.balance());
+
+///////////////////////////////////////////////////////////
 // VIDEO221 Inheritance Between "Classes": Object.create()
 /*
 // Unique in that we're not faking classes, rather, we are just linking objects
