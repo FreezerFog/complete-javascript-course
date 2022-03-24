@@ -38,8 +38,42 @@ const jonas = new PersonCl('Jonas Schmedtmann', 1991);
 const jessica = new PersonCl('Jessica Davis', 1996);
 
 ///////////////////////////////////////////////////////////
-// VIDEO220 Inheritance Between "Classes": ES6 Classes
+// VIDEO221 Inheritance Between "Classes": Object.create()
+/*
+// Unique in that we're not faking classes, rather, we are just linking objects
+const PersonProto = {
+  calcAge() {
+    console.log(2022 - this.birthYear);
+  },
+  // Not required, but gives us option to set properties using function
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
 
+// Sets prototype of StudentProto to PersonProto
+// It inherits from PersonProto
+const StudentProto = Object.create(PersonProto);
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+StudentProto.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+// Sets prototype of jay, a student object, to StudentProto
+// The student inherits from StudentProto, which inherits from PersonProto
+const jay = Object.create(StudentProto);
+jay.init('Jay', 1999, 'Computer Science');
+jay.introduce();
+jay.calcAge();
+*/
+
+///////////////////////////////////////////////////////////
+// VIDEO220 Inheritance Between "Classes": ES6 Classes
+/*
 // extends keyword creates inheritance between child and parent classes
 class StudentCl extends PersonCl {
   // If parameters of child and parent are the same then no constructor class is needed
@@ -65,6 +99,7 @@ class StudentCl extends PersonCl {
 const martha = new StudentCl('Martha Jones', 2001, 'Computer Science');
 martha.introduce();
 martha.calcAge();
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO218 Inheritance Between "Classes": Constructor Functions
