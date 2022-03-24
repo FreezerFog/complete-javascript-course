@@ -1,44 +1,70 @@
 'use strict';
 
-class PersonCl {
-  // Required
-  constructor(fullName, birthYear) {
-    this.fullName = fullName;
-    this.birthYear = birthYear;
+///////////////////////////////////////////////////////////
+// VIDEO223 Encapsulation: Protected Properties and Methods
+
+// Extremely valuable and necessary in real applications
+// Prevents external code from negatively impacting application
+// Allows for smaller public interface that makes application easier to maintain
+
+class Account {
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.locale = navigator.language;
+    // Protected property
+    // Add prefix of '_'
+    // The _ is a convention everyone uses, is not actually private
+    // Acts as clue to other devs that they should NOT touch the prop/method
+    this._movements = [];
+    this._pin = pin;
+
+    console.log(`Thanks for opening an accout, ${owner}`);
   }
 
-  get age() {
-    return 2022 - this.birthYear;
+  // Public interface of our objects
+  // A.k.a an API
+  getMovements() {
+    return this._movements;
   }
 
-  get fullName() {
-    return this._fullName;
+  deposit(amount) {
+    this._movements.push(amount);
   }
 
-  set fullName(name) {
-    if (name.includes(' ')) this._fullName = name;
-    else alert(`${name} is not a full name!`);
+  withdraw(amount) {
+    this.deposit(-amount);
   }
 
-  calcAge() {
-    console.log(2022 - this.birthYear);
+  _approveLoan(amount) {
+    return true;
   }
 
-  greet() {
-    console.log(`Hey ${this.firstName}`);
+  requestLoan(amount) {
+    if (this._approveLoan(amount)) {
+      this.deposit(amount);
+      console.log('Loan Approved!');
+    }
   }
 
-  static hey() {
-    console.log('Hey There');
-    console.log(this);
+  balance() {
+    return this._movements.reduce((prev, curr) => prev + curr, 0);
   }
 }
 
-const jonas = new PersonCl('Jonas Schmedtmann', 1991);
-const jessica = new PersonCl('Jessica Davis', 1996);
+const acc1 = new Account('Jonas', 'EUR', 1111);
+console.log(acc1);
+
+acc1.deposit(250);
+acc1.withdraw(140);
+console.log(acc1.balance());
+acc1.requestLoan(500);
+console.log(acc1.balance());
+console.log(acc1.getMovements());
 
 ///////////////////////////////////////////////////////////
 // VIDEO222 Another Class Example
+/*
 class Account {
   constructor(owner, currency, pin) {
     this.owner = owner;
@@ -84,6 +110,7 @@ acc1.withdraw(140);
 console.log(acc1.balance());
 acc1.requestLoan(500);
 console.log(acc1.balance());
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO221 Inheritance Between "Classes": Object.create()
@@ -122,6 +149,44 @@ jay.calcAge();
 ///////////////////////////////////////////////////////////
 // VIDEO220 Inheritance Between "Classes": ES6 Classes
 /*
+
+class PersonCl {
+  // Required
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  get age() {
+    return 2022 - this.birthYear;
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  calcAge() {
+    console.log(2022 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+
+  static hey() {
+    console.log('Hey There');
+    console.log(this);
+  }
+}
+
+const jonas = new PersonCl('Jonas Schmedtmann', 1991);
+const jessica = new PersonCl('Jessica Davis', 1996);
+
 // extends keyword creates inheritance between child and parent classes
 class StudentCl extends PersonCl {
   // If parameters of child and parent are the same then no constructor class is needed
