@@ -1,13 +1,9 @@
 'use strict';
 
 ///////////////////////////////////////////////////////////
-// VIDEO224 Encapsulation: Private Class Fields & Methods
+// VIDEO225 Chaining Methods
 
-// 1) Public fields
-// 2) Public methods
-// 3) Private fields
-// 4) Private methods
-// There are also static versions of public/private fields/methods
+// To chain methods we need to return the object with each method we want to chain
 
 class Account {
   // Public fields
@@ -36,16 +32,19 @@ class Account {
 
   deposit(amount) {
     this.#movements.push(amount);
+    return this;
   }
 
   withdraw(amount) {
     this.deposit(-amount);
+    return this;
   }
 
   requestLoan(amount) {
     if (this.#approveLoan(amount)) {
       this.deposit(amount);
       console.log('Loan Approved!');
+      return this;
     }
   }
 
@@ -75,6 +74,11 @@ console.log(acc1.balance());
 console.log(acc1.getMovements());
 // console.log(acc1.#movements); // returns error about private field
 Account.sayHello();
+
+// Chaining Methods
+acc1.deposit(300).deposit(500).withdraw(35).requestLoan(25000).withdraw(4000);
+console.log(acc1.balance());
+console.log(acc1.getMovements());
 
 ///////////////////////////////////////////////////////////
 // VIDEO222 Another Class Example
