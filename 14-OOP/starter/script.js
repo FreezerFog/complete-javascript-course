@@ -43,8 +43,57 @@ const jonas = new PersonCl('');
 const jessica = new PersonCl('Jessica Davis', 1996);
 
 ///////////////////////////////////////////////////////////
-// VIDEO215 Object.create()
+// VIDEO218 Inheritance Between "Classes": Constructor Functions
 
+// Creating a 'Student' class that inherits from 'Person' class
+
+// Via constructor function
+const Person = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+Person.prototype.calcAge = function () {
+  console.log(2022 - this.birthYear);
+};
+
+const Student = function (firstName, birthYear, course) {
+  // Person(firstName, birthYear) is an ordinary function call (it doesn't use 'new'). It has no 'this' (i.e undefined), so we cannot assign the values for firstName or birthYear
+  // .call() method to set 'this' keyword of Person to the 'this' keyword of the Student
+  Person.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+// Linking prototypes
+// Sets Student.prototype to inherit from Person.prototype
+const testStudent = 'Student';
+const testPerson = 'Person';
+
+Student.prototype = Object.create(Person.prototype);
+
+// Setting the Student constructor back to Student
+// Constructor was overwritten during linking above
+Student.prototype.constructor = Student;
+
+Student.prototype.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const mike = new Student('Mike', 2002, 'Computer Science');
+mike.introduce();
+mike.calcAge();
+console.dir(mike);
+
+// My function to create the child & parent prototype linking
+// function createChildToParentPrototypeChain(child, parent) {
+//   child.prototype = Object.create(parent.prototype);
+//   child.prototype.constructor = child;
+// }
+// createChildToParentPrototypeChain(Student, Person);
+
+///////////////////////////////////////////////////////////
+// VIDEO215 Object.create()
+/*
 // Object.create allows us to manually assign a prototype to an object, as well as to create a new object from scratch
 // Completely different from constructor functions and constructor methods
 // Done using an object literal
@@ -70,9 +119,11 @@ const sarah = Object.create(PersonProto);
 sarah.init('Sarah', 1987);
 sarah.calcAge();
 console.log(sarah);
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO215 Static Methods
+/*
 
 // Static methods are usually used as a helper with certain constructors
 // Array.from() is not an array method, but is used with a constructor to make arrays
@@ -90,6 +141,7 @@ console.log(sarah);
 // Adding hey() to class is done in the PersonCL class above
 // PersonCl.hey();
 // jessica.hey();
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO214 Setters and Getters
