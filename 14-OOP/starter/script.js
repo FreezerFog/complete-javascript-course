@@ -1,66 +1,80 @@
 'use strict';
 
 ///////////////////////////////////////////////////////////
-// VIDEO223 Encapsulation: Protected Properties and Methods
+// VIDEO224 Encapsulation: Private Class Fields & Methods
 
-// Extremely valuable and necessary in real applications
-// Prevents external code from negatively impacting application
-// Allows for smaller public interface that makes application easier to maintain
+// 1) Public fields
+// 2) Public methods
+// 3) Private fields
+// 4) Private methods
+// There are also static versions of public/private fields/methods
 
 class Account {
+  // Public fields
+  // Made similar to variable, but without a var, let, or const
+  // Available on instances, NOT prototype
+  // Accesible to 'this' keyword on the object
+  locale = navigator.language;
+
+  // Private fields
+  // Made with # prefix
+  // Available on instances, NOT prototype
+  #movements = [];
+  #pin;
+
   constructor(owner, currency, pin) {
     this.owner = owner;
     this.currency = currency;
-    this.locale = navigator.language;
-    // Protected property
-    // Add prefix of '_'
-    // The _ is a convention everyone uses, is not actually private
-    // Acts as clue to other devs that they should NOT touch the prop/method
-    this._movements = [];
-    this._pin = pin;
-
-    console.log(`Thanks for opening an accout, ${owner}`);
+    this.#pin = pin;
   }
 
-  // Public interface of our objects
-  // A.k.a an API
+  // Public Methods
+  // API - Public interface of our objects
   getMovements() {
-    return this._movements;
+    return this.#movements;
   }
 
   deposit(amount) {
-    this._movements.push(amount);
+    this.#movements.push(amount);
   }
 
   withdraw(amount) {
     this.deposit(-amount);
   }
 
-  _approveLoan(amount) {
-    return true;
-  }
-
   requestLoan(amount) {
-    if (this._approveLoan(amount)) {
+    if (this.#approveLoan(amount)) {
       this.deposit(amount);
       console.log('Loan Approved!');
     }
   }
 
   balance() {
-    return this._movements.reduce((prev, curr) => prev + curr, 0);
+    return this.#movements.reduce((prev, curr) => prev + curr, 0);
+  }
+
+  // Private methods
+  #approveLoan(amount) {
+    return true;
+  }
+
+  // Static Methods
+  // Available only on the class/prototype, not on the instances/objects of the class
+  static sayHello() {
+    console.log('Hello');
   }
 }
 
 const acc1 = new Account('Jonas', 'EUR', 1111);
 console.log(acc1);
-
 acc1.deposit(250);
 acc1.withdraw(140);
 console.log(acc1.balance());
 acc1.requestLoan(500);
 console.log(acc1.balance());
 console.log(acc1.getMovements());
+// console.log(acc1.#movements); // returns error about private field
+Account.sayHello();
 
 ///////////////////////////////////////////////////////////
 // VIDEO222 Another Class Example
