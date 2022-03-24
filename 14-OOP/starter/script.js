@@ -7,23 +7,19 @@ class PersonCl {
     this.birthYear = birthYear;
   }
 
-  // Getters
   get age() {
     return 2022 - this.birthYear;
   }
 
-  // Setting a property that already exists
-  // Need to use a new variable name in order to avoid naming conflict with the
-  // constructor method. The convention for this is to use a '_' prefix
-  // set fullName(name) {
-  //   if (name.includes(' ')) this._fullName = name;
-  //   else alert(`${name} is not a full name!`);
-  // }
-  // get fullName() {
-  //   return this._fullName;
-  // }
+  get fullName() {
+    return this._fullName;
+  }
 
-  // Methods will be added to .prototype property
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
   calcAge() {
     console.log(2022 - this.birthYear);
   }
@@ -32,19 +28,47 @@ class PersonCl {
     console.log(`Hey ${this.firstName}`);
   }
 
-  // Static method
   static hey() {
     console.log('Hey There');
     console.log(this);
   }
 }
 
-const jonas = new PersonCl('');
+const jonas = new PersonCl('Jonas Schmedtmann', 1991);
 const jessica = new PersonCl('Jessica Davis', 1996);
 
 ///////////////////////////////////////////////////////////
-// VIDEO218 Inheritance Between "Classes": Constructor Functions
+// VIDEO220 Inheritance Between "Classes": ES6 Classes
 
+// extends keyword creates inheritance between child and parent classes
+class StudentCl extends PersonCl {
+  // If parameters of child and parent are the same then no constructor class is needed
+  constructor(fullName, birthYear, course) {
+    // super() is the constructor function of the parent class
+    // super() must happen first if child has any parameters
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}`);
+  }
+
+  calcAge() {
+    console.log(
+      `I'm ${2022 - this.birthYear} years old, but I feel like I'm ${
+        this.age + 10
+      }!`
+    );
+  }
+}
+const martha = new StudentCl('Martha Jones', 2001, 'Computer Science');
+martha.introduce();
+martha.calcAge();
+
+///////////////////////////////////////////////////////////
+// VIDEO218 Inheritance Between "Classes": Constructor Functions
+/*
 // Creating a 'Student' class that inherits from 'Person' class
 
 // Via constructor function
@@ -90,6 +114,7 @@ console.dir(mike);
 //   child.prototype.constructor = child;
 // }
 // createChildToParentPrototypeChain(Student, Person);
+*/
 
 ///////////////////////////////////////////////////////////
 // VIDEO215 Object.create()
