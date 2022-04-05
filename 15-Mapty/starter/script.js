@@ -13,6 +13,48 @@ const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
 ////// CLASSES //////
+
+class Workout {
+  date = new Date();
+  // Unique ID's are important. Use a library in the real world.
+  id = (Date.now() + '').slice(-10);
+
+  constructor(coords, distance, duration) {
+    this.coords = coords; // [lat, lng]
+    this.distance = distance; // in km
+    this.duration = duration; // in minutes
+  }
+}
+
+class Running extends Workout {
+  constructor(coords, distance, duration, cadence) {
+    super(coords, distance, duration);
+    this.cadence = cadence;
+    this.calcPace();
+  }
+
+  calcPace() {
+    // min/km
+    this.pace = this.duration / this.distance;
+    return this.pace;
+  }
+}
+
+class Cycling extends Workout {
+  constructor(coords, distance, duration, elevationGain) {
+    super(coords, distance, duration);
+    this.elevationGain = elevationGain;
+    this.calcSpeed();
+  }
+
+  calcSpeed() {
+    this.speed = this.distance / (this.duration / 60);
+    return this.speed;
+  }
+}
+
+///////////////////////////////////////////////////////////
+// APPLICATION ARCHITECTURE
 class App {
   #map;
   #mapEvent;
@@ -97,4 +139,7 @@ class App {
 ////// CLASS INSTANCES //////
 const app = new App();
 
-////// EVENT HANDLERS //////
+// const run1 = new Running([39, -12], 5.2, 24, 178);
+// const bike1 = new Cycling([39, -12], 27, 95, 523);
+// console.log(run1);
+// console.log(bike1);
