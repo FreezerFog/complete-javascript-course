@@ -15,8 +15,6 @@ class Workout {
   date = new Date();
   // Unique ID's are important. Use a library in the real world.
   id = (Date.now() + '').slice(-10);
-  // Just for fun, a public interface for the app
-  clicks = 0;
 
   constructor(coords, distance, duration) {
     this.coords = coords; // [lat, lng]
@@ -32,10 +30,6 @@ class Workout {
     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
       months[this.date.getMonth()]
     } ${this.date.getDate()}`;
-  }
-
-  click() {
-    this.clicks++;
   }
 }
 
@@ -81,8 +75,14 @@ class App {
   #workouts = [];
 
   constructor() {
+    ////// Loading Local Storage //////
+    this._getLocalStorage();
+
+    ////// Get User's Position //////
     // Runs when instance of App is created
     this._getPosition();
+
+    ////// Attaching Event Handlers //////
     // Bind needed to set 'this' keyword from form element to app instance object
     form.addEventListener('submit', this._newWorkout.bind(this));
     // Bind not needed because function does not use 'this' keyword
@@ -106,7 +106,6 @@ class App {
     const { latitude, longitude } = position.coords;
     const coords = [latitude, longitude];
 
-    console.log(this);
     this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
 
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -116,6 +115,11 @@ class App {
 
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
+
+    // Loading map markers from local storage
+    this.#workouts.forEach(work => {
+      this._renderWorkoutMarker(work);
+    });
   }
 
   _showForm(mapE) {
@@ -186,7 +190,6 @@ class App {
 
     // Add new object to workout array
     this.#workouts.push(workout);
-    console.log(workout);
 
     // Render workout on map as marker
     this._renderWorkoutMarker(workout);
@@ -196,6 +199,9 @@ class App {
 
     // Hide form + clear input fields
     this._hideForm();
+
+    // Set local storage to all workouts
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -292,16 +298,26 @@ class App {
         duration: 1,
       },
     });
+  }
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    if (!data) return;
+    this.#workouts = data;
 
-    // Using public interface
-    workout.click();
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+  }
+
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 }
 
 ////// CLASS INSTANCES //////
 const app = new App();
-
-// const run1 = new Running([39, -12], 5.2, 24, 178);
-// const bike1 = new Cycling([39, -12], 27, 95, 523);
-// console.log(run1);
-// console.log(bike1);
