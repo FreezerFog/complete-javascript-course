@@ -7,40 +7,27 @@ const countriesContainer = document.querySelector('.countries');
 // https://restcountries.com/v2/
 
 ///////////////////////////////////////////////////////////
-// VIDEO254 - Handling Rejected Promises
+// VIDEO255 - Throwing Errors Manually
 
-// 2 ways to deal with rejected promises:
-// Option 1: then() callbacks with each then() method
-// Option 2: catch() at end of fetch() chain to handle all errors
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
+    return response.json();
+  });
+};
 
-// then(), catch(), and finally() run on fetch() when promise is settled as:
-// then() only on fulfilled
-// catch() only on rejected
-// finally() always!
-
-// finally()
-// This callback function will always execute on a fetch() request
-// Often used for hiding 'spinners' that indicate a website is loading something
-
-// Option 1 Example
-// then() accepts 2 callback functions. The 1st for fulfilled, 2nd for rejected
-//    .then(
-//      response => response.json(),
-//      err => alert(err)
-//    )
-
-// Option 2 Example
-// catch() as seen below
 function getCountryData(country) {
-  fetch(`https://restcountries.com/v2/name/${country}`)
-    .then(response => response.json())
+  // Country 1
+  getJSON(`https://restcountries.com/v2/name/${country}`, 'Country not found')
     .then(data => {
       renderCountry(data[0]);
       const neighbour = data[0].borders[0];
-      if (!neighbour) return;
-      return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
+      if (!neighbour) throw new Error('No neighbour found');
+      return getJSON(
+        `https://restcountries.com/v2/alpha/${neighbour}`,
+        'Country not found'
+      );
     })
-    .then(response => response.json())
     .then(data => renderCountry(data, 'neighbour'))
     .catch(err => {
       console.error(`${err} :(`);
@@ -79,5 +66,5 @@ function renderError(msg) {
 }
 
 btn.addEventListener('click', function () {
-  getCountryData('germany');
+  getCountryData('portugal');
 });
