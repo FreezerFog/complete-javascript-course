@@ -68,3 +68,8 @@ function renderError(msg) {
 btn.addEventListener('click', function () {
   getCountryData('portugal');
 });
+
+console.log('Test Start');
+setTimeout(() => console.log('0 Sec Timer'), 0);
+Promise.resolve('Resolved promise 1').then(res => console.log(res));
+console.log('Test End');
