@@ -7,7 +7,58 @@ const countriesContainer = document.querySelector('.countries');
 // https://restcountries.com/v2/
 
 ///////////////////////////////////////////////////////////
-// VIDEO255 - Throwing Errors Manually
+// VIDEO259 - Building a Simple Promise
+
+// Promises accept 1 argument called the 'executor function'
+// The executor function will run immediately when the Promise is called
+// The executor function accepts 2 arguments: a resolve & reject function (named whatever)
+// The executor function contains the asynch behavior that we want to handle in the promise
+// The executor function should eventually produce a result value for the promise
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log('Waiting for draw...');
+
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      // resolve() sets the result of the promise to fulfilled (aka resolved)
+      // Whatever we pass into the resolve() function will become the result that will be used
+      // in the .then() handler of the promise
+      resolve('You Win 🦑');
+    } else {
+      // reject sets the result of the promise to rejected
+      reject(new Error('You LOSE 😟'));
+    }
+  }, 2000);
+});
+
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+// Promisifying
+// Act of putting a promise inside of a callback function
+// Promisifying setTimeout callback function
+// Makes a function work like the fetch() function, by returning a promise
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+const waitAF = function (seconds) {
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+};
+
+wait(3).then(res => console.log('Wait!'));
+waitAF(5).then(res => console.log('Wait AF!'));
+
+wait(7)
+  .then(() => {
+    console.log('I waited for 7 seconds');
+    return wait(1);
+  })
+  .then(() => console.log('I waited for 1 second'));
+
+// Immediately Resolving or Rejecting a Promise()
+Promise.resolve('abc').then(x => console.log(x));
+Promise.reject(new Error('Problem!')).catch(x => console.error(x));
 
 const getJSON = function (url, errorMsg = 'Something went wrong') {
   return fetch(url).then(response => {
@@ -68,8 +119,3 @@ function renderError(msg) {
 btn.addEventListener('click', function () {
   getCountryData('portugal');
 });
-
-console.log('Test Start');
-setTimeout(() => console.log('0 Sec Timer'), 0);
-Promise.resolve('Resolved promise 1').then(res => console.log(res));
-console.log('Test End');
