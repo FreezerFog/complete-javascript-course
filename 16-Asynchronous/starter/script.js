@@ -7,54 +7,54 @@ const countriesContainer = document.querySelector('.countries');
 // https://restcountries.com/v2/
 
 ///////////////////////////////////////////////////////////
-// VIDEO265 - Running Promises in Parallel
+// VIDEO266 - Other Promise Combinators: race, allSettled and any
 
-// Calling promises one at a time makes each promise wait for the prior one to finish
-// Running promises concurrently is much faster than running them in sequence
-// Combinators, like Promise.all(), allow us to run promises concurrently
-// A failed Promise.all() will reject ALL of the promises it is handling
+// All combinators receive an array of promises and return a promise
 
-async function getCountries(c1, c2, c3) {
-  try {
-    // EFFICIENT, promises are concurrently fetched
-    // A single rejection will cause all to be rejected
-    const data = await Promise.all([
-      getJSON(`https://restcountries.com/v2/name/${c1}`),
-      getJSON(`https://restcountries.com/v2/name/${c2}`),
-      getJSON(`https://restcountries.com/v2/name/${c3}`),
-    ]);
-    console.log(data.map(d => d[0].capital));
+// Promise.race()
+// Settled as soon as a single promise is settled (e.g rejected or fulfilled)
+// If first result is fulfilled .race() will return value of the specific fulfilled promise
+(async function () {
+  const res = await Promise.race([
+    getJSON(`https://restcountries.com/v2/name/italy`),
+    getJSON(`https://restcountries.com/v2/name/spain`),
+    getJSON(`https://restcountries.com/v2/name/france`),
+  ]);
+  console.log(res[0]);
+})();
 
-    // VERY INEFFICIENT
-    // The promises must happen in sequence, rather than concurrently
-    // const [data1] = await getJSON(`https://restcountries.com/v2/name/${c1}`);
-    // const [data2] = await getJSON(`https://restcountries.com/v2/name/${c2}`);
-    // const [data3] = await getJSON(`https://restcountries.com/v2/name/${c3}`);
-    // console.log([data1.capital, data2.capital, data3.capital]);
-  } catch (err) {
-    console.error(err);
-  }
+Promise.race([getJSON(`https://restcountries.com/v2/name/canada`), timeout(1)])
+  .then(data => console.log(data[0]))
+  .catch(err => console.error(`Error: ${err.message}`));
+
+// Promise.allSettled()
+// Returns array of all settled promises (e.g both fulfilled & rejected are returned)
+Promise.allSettled([
+  Promise.resolve('Success'),
+  Promise.resolve('Success 2'),
+  Promise.reject('ERROR'),
+  Promise.resolve('Success 3'),
+  Promise.reject('ERROR 2'),
+]).then(res => console.log(res));
+
+// Promise.any()
+// Returns the first fullfilled promise (ignores rejections)
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.resolve('Success 2'),
+  Promise.reject('ERROR'),
+  Promise.resolve('Success 3'),
+  Promise.reject('ERROR 2'),
+]).then(res => console.log(res));
+
+// Function that returns a rejection and error if time is reached
+function timeout(seconds) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error('Request took too long!'));
+    }, seconds * 1000);
+  });
 }
-// getCountries('portugal', 'canada', 'tanzania');
-
-///////////////////////////////////////////////////////////
-////// Testing arrays with Promise.all() //////
-async function getCountries2(countries) {
-  try {
-    let pendingPromises = [];
-    countries.forEach(country => {
-      pendingPromises.push(
-        getJSON(`https://restcountries.com/v2/name/${country}`)
-      );
-    });
-    const data = await Promise.all(pendingPromises);
-    console.log(data.map(d => d[0].capital));
-  } catch (err) {
-    console.error(err);
-  }
-}
-getCountries2(['portugal', 'canada', 'tanzania']);
-///////////////////////////////////////////////////////////
 
 async function whereAmI() {
   try {
