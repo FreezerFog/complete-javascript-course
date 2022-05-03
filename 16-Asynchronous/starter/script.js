@@ -7,10 +7,58 @@ const countriesContainer = document.querySelector('.countries');
 // https://restcountries.com/v2/
 
 ///////////////////////////////////////////////////////////
-// VIDEO262 - Error Handling with Try...Catch
+// VIDEO264 - Returning Values from Async Functions
 
-// Try/Catch will attempt the try block, and if it produces an error will run the catch block
-// We throw errors inside the try block to make them appear in the catch block
+// Async functions always return a promise
+// If we try to assign a variable to an async function's return value then it will show as a promise pending, NOT the fullfilled promise's return value
+// To get the fullfilled promise's return value use .then(), .catch(), & .finally()
+// An error will cause the promise to terminate before it reaches a return. To avoid this throw an error when found and deal with the return value as appropriate there
+// Examples below:
+
+//////  Returning Values with .then() & .catch() //////
+async function testReturn() {
+  try {
+    // FULFILLED
+    const var1 = 0;
+    var1 = 2; // Turn ON/OFF to test fulfilled/rejected promise
+    return 'HI';
+  } catch (err) {
+    // REJECTED
+    // Need to throw error to enable catch later
+    throw err;
+  }
+}
+console.log('1: Begin test');
+testReturn()
+  .then(msg => console.log(`2: ${msg}`))
+  .catch(err => console.error(`2: Whoops: ${err.message}`))
+  .finally(() => console.log('3: Finally'));
+// Success returns '2: HI'
+// Rejection returns "2: Whoops: ..."
+// Always returns '3: Finally' at the end
+
+////// Returning values with async await //////
+// Converting example above into an async await function using an IFFY
+(async function () {
+  // ALWAYS
+  console.log('1: IFFY');
+  try {
+    // FULFILLED
+    const msg = await testReturn();
+    console.log(`2: IFFY SUCCESS ${msg}`);
+  } catch (err) {
+    // REJECTED
+    console.error(`2: IFFY ERROR: ${err.message}`);
+  }
+  // ALWAYS
+  console.log('3: IFFY END');
+})();
+// Always returns '1: IFFY
+// Success returns '2: IFFY SUCCESS'
+// Rejection returns "2: IFFY ERROR: ..."
+// Always returns '3: IFFY END'
+
+////// End Examples //////
 
 async function whereAmI() {
   try {
@@ -33,10 +81,12 @@ async function whereAmI() {
     // Rendering Country
     renderCountry(dataCountry[0]);
     renderContainer();
+    return 'HI';
   } catch (err) {
     renderError(`😫 ${err.message}`);
   }
 }
+
 whereAmI();
 
 function getPosition() {
