@@ -7,58 +7,54 @@ const countriesContainer = document.querySelector('.countries');
 // https://restcountries.com/v2/
 
 ///////////////////////////////////////////////////////////
-// VIDEO264 - Returning Values from Async Functions
+// VIDEO265 - Running Promises in Parallel
 
-// Async functions always return a promise
-// If we try to assign a variable to an async function's return value then it will show as a promise pending, NOT the fullfilled promise's return value
-// To get the fullfilled promise's return value use .then(), .catch(), & .finally()
-// An error will cause the promise to terminate before it reaches a return. To avoid this throw an error when found and deal with the return value as appropriate there
-// Examples below:
+// Calling promises one at a time makes each promise wait for the prior one to finish
+// Running promises concurrently is much faster than running them in sequence
+// Combinators, like Promise.all(), allow us to run promises concurrently
+// A failed Promise.all() will reject ALL of the promises it is handling
 
-//////  Returning Values with .then() & .catch() //////
-async function testReturn() {
+async function getCountries(c1, c2, c3) {
   try {
-    // FULFILLED
-    const var1 = 0;
-    var1 = 2; // Turn ON/OFF to test fulfilled/rejected promise
-    return 'HI';
+    // EFFICIENT, promises are concurrently fetched
+    // A single rejection will cause all to be rejected
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v2/name/${c1}`),
+      getJSON(`https://restcountries.com/v2/name/${c2}`),
+      getJSON(`https://restcountries.com/v2/name/${c3}`),
+    ]);
+    console.log(data.map(d => d[0].capital));
+
+    // VERY INEFFICIENT
+    // The promises must happen in sequence, rather than concurrently
+    // const [data1] = await getJSON(`https://restcountries.com/v2/name/${c1}`);
+    // const [data2] = await getJSON(`https://restcountries.com/v2/name/${c2}`);
+    // const [data3] = await getJSON(`https://restcountries.com/v2/name/${c3}`);
+    // console.log([data1.capital, data2.capital, data3.capital]);
   } catch (err) {
-    // REJECTED
-    // Need to throw error to enable catch later
-    throw err;
+    console.error(err);
   }
 }
-console.log('1: Begin test');
-testReturn()
-  .then(msg => console.log(`2: ${msg}`))
-  .catch(err => console.error(`2: Whoops: ${err.message}`))
-  .finally(() => console.log('3: Finally'));
-// Success returns '2: HI'
-// Rejection returns "2: Whoops: ..."
-// Always returns '3: Finally' at the end
+// getCountries('portugal', 'canada', 'tanzania');
 
-////// Returning values with async await //////
-// Converting example above into an async await function using an IFFY
-(async function () {
-  // ALWAYS
-  console.log('1: IFFY');
+///////////////////////////////////////////////////////////
+////// Testing arrays with Promise.all() //////
+async function getCountries2(countries) {
   try {
-    // FULFILLED
-    const msg = await testReturn();
-    console.log(`2: IFFY SUCCESS ${msg}`);
+    let pendingPromises = [];
+    countries.forEach(country => {
+      pendingPromises.push(
+        getJSON(`https://restcountries.com/v2/name/${country}`)
+      );
+    });
+    const data = await Promise.all(pendingPromises);
+    console.log(data.map(d => d[0].capital));
   } catch (err) {
-    // REJECTED
-    console.error(`2: IFFY ERROR: ${err.message}`);
+    console.error(err);
   }
-  // ALWAYS
-  console.log('3: IFFY END');
-})();
-// Always returns '1: IFFY
-// Success returns '2: IFFY SUCCESS'
-// Rejection returns "2: IFFY ERROR: ..."
-// Always returns '3: IFFY END'
-
-////// End Examples //////
+}
+getCountries2(['portugal', 'canada', 'tanzania']);
+///////////////////////////////////////////////////////////
 
 async function whereAmI() {
   try {
@@ -95,12 +91,12 @@ function getPosition() {
   });
 }
 
-const getJSON = function (url, errorMsg = 'Something went wrong') {
+function getJSON(url, errorMsg = 'Something went wrong') {
   return fetch(url).then(response => {
     if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
     return response.json();
   });
-};
+}
 
 function getCountryData(country) {
   getJSON(`https://restcountries.com/v2/name/${country}`, 'Country not found')
