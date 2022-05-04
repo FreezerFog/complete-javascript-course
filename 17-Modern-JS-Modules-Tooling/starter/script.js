@@ -1,27 +1,33 @@
 ///////////////////////////////////////////////////////////
-// VIDEO272: Importing and Exporting in ES6 Modules
+// VIDEO273: Top-level Await (ES2022)
 
-// Importing Module
-console.log('Importing Module');
+// Top Level Await
+// Previously would have required an async function
+// Blocks execution of entire rest of module
+// Blocks execution of modules it exports to (until it finishes blocking code)
+// Use with caution!
 
-// Importing all of the shopping cart module
+// console.log('Start fetching');
+// const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+// const data = await res.json();
+// console.log(data);
+// console.log('End fetching');
+
+async function getLastPost() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+  const data = await res.json();
+  console.log(data);
+
+  return { title: data.at(-1).title, text: data.at(-1).body };
+}
+
+// Consuming promise using top level await
+const lastPost = await getLastPost();
+console.log(lastPost);
+
+// Consuming promise using then
+// Not clean
+const lastPostThen = getLastPost();
+lastPostThen.then(last => console.log(last));
+
 import * as ShoppingCart from './shoppingCart.js';
-ShoppingCart.addToCart('Bread', 2);
-ShoppingCart.addToCart('Apples', 6);
-ShoppingCart.addToCart('Pizza', 1);
-console.log(ShoppingCart.cart);
-console.log(ShoppingCart.totalPrice);
-
-// Importing the named exports individually from shopping cart module
-// import { addToCart, totalPrice as price, tq } from './shoppingCart.js';
-// addToCart('Bread', 5);
-// console.log(price, tq);
-
-// Importing the default export from shopping cart module
-// import add from './shoppingCart.js';
-// add('Carrots', 7);
-
-// Combining default export and named exports from shopping cart module
-// Never done, but technically possible
-// import add, { addToCart, totalPrice as price, tq } from './shoppingCart.js';
-// console.log(price);
