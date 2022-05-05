@@ -1,9 +1,20 @@
 ///////////////////////////////////////////////////////////
-// VIDEO273: Top-level Await (ES2022)
+// VIDEO278: Bundling with Parcel and NPM Scripts
 
-// Top-level await
-// For example of a module blocking modules that import it
-// shoppingCart.js module blocks script.js from executing until fetch is fulfilled
-console.log('Start fetching users');
-await fetch('https://jsonplaceholder.typicode.com/users');
-console.log('Finish fetching users');
+console.log('Exporting module');
+const shippingCost = 10;
+export const cart = [];
+export function addToCart(product, quantity) {
+  cart.push({ product, quantity });
+  console.log(`${quantity} ${product} added to cart`);
+}
+
+const totalPrice = 237;
+const totalQuantity = 23;
+
+export { totalPrice, totalQuantity as tq };
+
+export default function (product, quantity) {
+  cart.push({ product, quantity });
+  console.log(`${quantity} ${product} added to cart`);
+}
