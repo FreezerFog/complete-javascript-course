@@ -1,21 +1,24 @@
 ///////////////////////////////////////////////////////////
-// VIDEO275: CommonJS Modules
+// VIDEO277: Introduction to NPM
 
-// Node.js uses CommonJS Modules
-// With CommonJS one file is one module
+// Run npm install in order to get the required node_modules
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
 
-// Export with CommonJS (Only works on server via Node)
-// export.addToCart = function(product, quantity) {
-//   cart.push({ product, quantity });
-//   console.log(`${quantity} ${product} added to cart. Shipping total ${shippingCost}`);
-// }
+const state = {
+  cart: [
+    { product: 'bread', quantity: 5 },
+    { product: 'pizza', quantity: 5 },
+  ],
+  user: { loggedIn: true },
+};
 
-// Import with CommonJS
-// const { addToCart } = require('./shoppingCart.js');
+// Cloning with lodash module
+const stateDeepClone = cloneDeep(state);
+console.log(stateDeepClone);
 
-// The way to create & use modules before ES6
-// Useful to know because we will see this pattern in use
-// Primarily done using IIFE 'Iffy' functions
-// Works because of closures
-// Doesn't work well with multiple files due to needing to load HTML scripts in proper order
-// Bundling does not work with this approach
+// This method of cloning objects uses a pointer.
+// Any changes to original object will show in the copied object.
+const stateClone = Object.assign({}, state);
+state.user.loggedIn = false;
+console.log(stateClone); // LoggedIn =  false
+console.log(stateDeepClone); // LoggedIn = true
