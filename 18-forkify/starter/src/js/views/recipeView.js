@@ -24,6 +24,14 @@ class RecipeView {
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // Publisher
+  // Necessary for Publisher Subscriber pattern
+  // Uses handler argument passed in from the controller
+  // controlRecipes() argument is used as argument to load recipes when specified events are fired. In this way the view handles the event listeners and recipe rendering, while the controller handles the business logic separately.
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
+
   #clear() {
     this.#parentElement.innerHTML = '';
   }

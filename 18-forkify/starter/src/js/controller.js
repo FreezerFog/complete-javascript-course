@@ -17,10 +17,17 @@ async function controlRecipes() {
     await model.loadRecipe(id);
     recipeView.render(model.state.recipe);
   } catch (err) {
-    alert(`${err}`);
+    console.error(err);
   }
 }
 
-['hashchange', 'load'].forEach(ev =>
-  window.addEventListener(ev, controlRecipes)
-);
+function init() {
+  // Subscriber
+  // Necessary for Publisher Subscriber pattern
+  // On init(), controlRecipes() is passed to view's addHandlerRender() as argument
+  // The view will use controlRecipes() inside the view
+  // Business logic controlRecipes() stays in controller, while the view handles events & rendering
+  recipeView.addHandlerRender(controlRecipes);
+}
+
+init();
