@@ -6,9 +6,9 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 // Parcel - Enables hot reloading of page during development
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
 ////// FUNCTIONS //////
 function getRecipeHash() {
@@ -37,7 +37,8 @@ async function controlSearchResults() {
     // Load search results
     await model.loadSearchResults(query);
     // Render results
-    resultsView.render(model.state.search.results);
+    // resultsView.render(model.state.search.results); // Render all results
+    resultsView.render(model.getSearchResultsPage());
   } catch (err) {
     console.log(error);
   }
