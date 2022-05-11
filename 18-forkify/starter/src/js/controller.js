@@ -1,5 +1,6 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
+import searchView from './views/searchView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
@@ -21,6 +22,19 @@ async function controlRecipes() {
   }
 }
 
+async function controlSearchResults() {
+  try {
+    // Get search query
+    const query = searchView.getQuery();
+    if (!query) return;
+    // Load search results
+    await model.loadSearchResults(query);
+    // Render results
+  } catch (err) {
+    console.log(error);
+  }
+}
+
 function init() {
   // Subscriber
   // Necessary for Publisher Subscriber pattern
@@ -28,6 +42,7 @@ function init() {
   // The view will use controlRecipes() inside the view
   // Business logic controlRecipes() stays in controller, while the view handles events & rendering
   recipeView.addHandlerRender(controlRecipes);
+  searchView.addHandlerSearch(controlSearchResults);
 }
 
 init();

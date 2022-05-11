@@ -46,7 +46,7 @@ class RecipeView {
     this.insertMarkup(markup);
   }
 
-  renderMessage(message = this.#Message) {
+  renderMessage(message = this.#message) {
     const markup = `
     <div class="message">
       <div>
