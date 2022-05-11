@@ -1,22 +1,9 @@
-///////////////////////////////////////////////////////////
-// VIDEO292: Refactoring for MVC
-// https://forkify-api.herokuapp.com/v2
-
-////// IMPORTS //////
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 ////// FUNCTIONS //////
-function timeout(s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-}
-
 function getRecipeHash() {
   return window.location.hash.slice(1);
 }
