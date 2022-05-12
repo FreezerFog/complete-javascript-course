@@ -2,6 +2,7 @@ import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
+import paginationView from './views/paginationView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
@@ -37,21 +38,31 @@ async function controlSearchResults() {
     // Load search results
     await model.loadSearchResults(query);
     // Render results
-    // resultsView.render(model.state.search.results); // Render all results
     resultsView.render(model.getSearchResultsPage());
+    // Render initial pagination buttons
+    paginationView.render(model.state.search);
   } catch (err) {
     console.log(error);
   }
 }
 
+function controlPagination(goToPage) {
+  // 1) Render NEW results
+  resultsView.render(model.getSearchResultsPage(goToPage));
+  // 2) Render NEW pagination buttons
+  paginationView.render(model.state.search);
+}
+
 function init() {
-  // Subscriber
-  // Necessary for Publisher Subscriber pattern
-  // On init(), controlRecipes() is passed to view's addHandlerRender() as argument
-  // The view will use controlRecipes() inside the view
-  // Business logic controlRecipes() stays in controller, while the view handles events & rendering
+  // Publisher Subscriber Pattern
+  // Allows for separation of business logic (controller) and presentation logic (views)
+  // Subscibers located in controller
+  // Publishers located in views (methods with 'addHandler' prefix are the publishers)
+  // The appropriate controller method is passed to each view as needed
+  // Code below sets up the subscriber relationship with each view's publisher as soon as the program is started. Common to do this in an 'init()' function
   recipeView.addHandlerRender(controlRecipes);
   searchView.addHandlerSearch(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination);
 }
 
 init();
