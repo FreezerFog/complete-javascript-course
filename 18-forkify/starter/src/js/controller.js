@@ -20,7 +20,7 @@ async function controlRecipes() {
   const id = getRecipeHash();
   if (!id) return;
   recipeView.renderSpinner();
-
+  resultsView.update(model.getSearchResultsPage());
   try {
     await model.loadRecipe(id);
     recipeView.render(model.state.recipe);
@@ -58,7 +58,8 @@ function controlServings(newServings) {
   model.updateServings(newServings);
 
   // Update the recipe view
-  recipeView.render(model.state.recipe);
+  // recipeView.render(model.state.recipe);
+  recipeView.update(model.state.recipe);
 }
 
 function init() {
