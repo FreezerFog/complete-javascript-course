@@ -55,3 +55,21 @@ export function getSearchResultsPage(page = state.search.page) {
   const end = page * state.search.resultsPerPage; // 9;
   return state.search.results.slice(start, end);
 }
+
+export function updateServings(newServings) {
+  // MY WAY - Copy piece of state, mutate copy, then replace state piece with copy
+  const newRecipe = JSON.parse(JSON.stringify(state.recipe));
+  newRecipe.ingredients.map(
+    ing => (ing.quantity = (ing.quantity * newServings) / newRecipe.servings)
+  );
+  newRecipe.servings = newServings;
+  state.recipe = newRecipe;
+
+  // JONAS WAY - Has side effects
+  // state.recipe.ingredients.forEach(ingredient => {
+  //   ingredient.quantity =
+  //     (ingredient.quantity * newServings) / state.recipe.servings;
+  //   // newQuan
+  // });
+  // state.recipe.servings = newServings;
+}
