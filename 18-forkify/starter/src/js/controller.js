@@ -18,13 +18,17 @@ function getRecipeHash() {
 }
 
 async function controlRecipes() {
-  const id = getRecipeHash();
-  if (!id) return;
-  recipeView.renderSpinner();
-  resultsView.update(model.getSearchResultsPage());
-  bookmarksView.update(model.state.bookmarks);
   try {
+    const id = getRecipeHash();
+    if (!id) return;
+    recipeView.renderSpinner();
+    // Updates bookmarks view
+    bookmarksView.update(model.state.bookmarks);
+    // Update results view to mark selected recipe
+    resultsView.update(model.getSearchResultsPage());
+    // Loads recipe
     await model.loadRecipe(id);
+    // Renders recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
     recipeView.renderError();
@@ -73,6 +77,10 @@ function controlAddBookmark() {
   bookmarksView.render(model.state.bookmarks);
 }
 
+function controlBookmarks() {
+  bookmarksView.render(model.state.bookmarks);
+}
+
 function init() {
   // Publisher Subscriber Pattern
   // Allows for separation of business logic (controller) and presentation logic (views)
@@ -80,6 +88,7 @@ function init() {
   // Publishers located in views (methods with 'addHandler' prefix are the publishers)
   // The appropriate controller method is passed to each view as needed
   // Code below sets up the subscriber relationship with each view's publisher as soon as the program is started. Common to do this in an 'init()' function
+  bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);

@@ -80,21 +80,36 @@ export function updateServings(newServings) {
   // state.recipe.servings = newServings;
 }
 
+function persistBookmarks() {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+}
+
 export function addBookmark(recipe) {
-  // Add bookmark to state
   state.bookmarks.push(recipe);
-  // Set recipe's bookmarked property
   setRecipeBookmark(true);
+  persistBookmarks();
 }
 
 export function deleteBookmark(id) {
-  // Delete bookmark from state
   const index = state.bookmarks.findIndex(el => el.id === id);
   state.bookmarks.splice(index, 1);
-  // Set recipe's bookmarked property
   setRecipeBookmark(false);
+  persistBookmarks();
 }
 
 function setRecipeBookmark(bool) {
   state.recipe.bookmarked = bool;
 }
+
+function init() {
+  const storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage);
+}
+init();
+
+// TODO: Remove prior to push to production
+// // For clearing bookmarks during app development
+// function clearBookmarks() {
+//   localStorage.clear('bookmarks');
+// }
+// clearBookmarks();
