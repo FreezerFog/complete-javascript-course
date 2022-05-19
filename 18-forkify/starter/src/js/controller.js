@@ -1,5 +1,6 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
+import addRecipeView from './views/addRecipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
@@ -81,6 +82,11 @@ function controlBookmarks() {
   bookmarksView.render(model.state.bookmarks);
 }
 
+function controlAddRecipe(newRecipe) {
+  console.log(newRecipe);
+  // Upload new recipe data to model
+}
+
 function init() {
   // Publisher Subscriber Pattern
   // Allows for separation of business logic (controller) and presentation logic (views)
@@ -94,6 +100,7 @@ function init() {
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
+  addRecipeView.addHandlerUpload(controlAddRecipe);
 }
 
 init();
