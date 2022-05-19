@@ -1,5 +1,6 @@
 import { API_URL, KEY } from './config';
 import { RESULTS_PER_PAGE } from './config';
+import { AJAX } from './helpers';
 import { getJSON, sendJSON } from './helpers';
 
 export const state = {
@@ -32,7 +33,7 @@ function createRecipeObject(data) {
 
 export async function loadRecipe(id) {
   try {
-    const data = await getJSON(`${API_URL}${id}`);
+    const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
     state.recipe = createRecipeObject(data);
 
     if (state.bookmarks.some(bookmark => bookmark.id === id))
@@ -47,13 +48,14 @@ export async function loadSearchResults(query) {
   try {
     state.search.query = query;
     state.search.page = 1;
-    const data = await getJSON(`${API_URL}?search=${query}`);
+    const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
     state.search.results = data.data.recipes.map(recipe => {
       return {
         id: recipe.id,
         title: recipe.title,
         publisher: recipe.publisher,
         image: recipe.image_url,
+        ...(recipe.key && { key: recipe.key }),
       };
     });
   } catch (err) {
@@ -109,12 +111,11 @@ function setRecipeBookmark(bool) {
 
 export async function uploadRecipe(newRecipe) {
   try {
-    console.log(newRecipe);
     // 1) Turn newRecipe data into format that API will accept
     const ingredients = Object.entries(newRecipe)
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
-        const ingArr = ing[1].replaceAll(' ', '').split(',');
+        const ingArr = ing[1].split(',').map(el => el.trim());
         if (ingArr.length !== 3)
           throw new Error('Wrong ingredient format! Please use correct format');
         const [quantity, unit, description] = ing[1]
@@ -132,9 +133,8 @@ export async function uploadRecipe(newRecipe) {
       servings: +newRecipe.servings,
       ingredients,
     };
-    console.log(recipe);
     // 2) Submit formatted data to API for posting
-    const data = await sendJSON(`${API_URL}?key=${KEY}`, recipe);
+    const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
   } catch (err) {
@@ -142,11 +142,10 @@ export async function uploadRecipe(newRecipe) {
   }
 }
 
-// TODO: Remove prior to push to production
 // For clearing bookmarks during app development
-function clearBookmarks() {
-  localStorage.clear('bookmarks');
-}
+// function clearBookmarks() {
+//   localStorage.clear('bookmarks');
+// }
 // clearBookmarks();
 
 function init() {

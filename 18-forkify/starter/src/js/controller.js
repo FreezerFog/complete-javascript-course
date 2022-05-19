@@ -50,7 +50,8 @@ async function controlSearchResults() {
     // Render initial pagination buttons
     paginationView.render(model.state.search);
   } catch (err) {
-    console.log(error);
+    // console.log(error);
+    throw err;
   }
 }
 
@@ -91,14 +92,18 @@ async function controlAddRecipe(newRecipe) {
     await model.uploadRecipe(newRecipe);
     // Render recipe
     recipeView.render(model.state.recipe);
-    // Update bookmarks list
-    model.addBookmark(model.state.recipe);
+    // Render bookmarks list
     bookmarksView.render(model.state.bookmarks);
     // Display success message
     addRecipeView.renderMessage();
-    // Close form window
+    // Change ID in URL
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+    // Closes success message window & renders new upload recipe form
     setTimeout(function () {
       addRecipeView.toggleWindow();
+      setTimeout(function () {
+        addRecipeView.render(newRecipe);
+      }, 1000);
     }, MODAL_CLOSE_SEC * 1000);
   } catch (err) {
     addRecipeView.renderError(err);
