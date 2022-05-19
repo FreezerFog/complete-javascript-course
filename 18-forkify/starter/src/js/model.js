@@ -1,6 +1,6 @@
-import { API_URL } from './config';
+import { API_URL, KEY } from './config';
 import { RESULTS_PER_PAGE } from './config';
-import { getJSON } from './helpers';
+import { getJSON, sendJSON } from './helpers';
 
 export const state = {
   recipe: {},
@@ -13,21 +13,27 @@ export const state = {
   bookmarks: [],
 };
 
+function createRecipeObject(data) {
+  const { recipe } = data.data;
+  // recipe.key is conditionally added using ... spread operator
+  // ... Returns nothing OR an object with an object ready key:value pair
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.publisher,
+    sourceUrl: recipe.source_url,
+    image: recipe.image_url,
+    servings: recipe.servings,
+    cookingTime: recipe.cooking_time,
+    ingredients: recipe.ingredients,
+    ...(recipe.key && { key: recipe.key }),
+  };
+}
+
 export async function loadRecipe(id) {
   try {
     const data = await getJSON(`${API_URL}${id}`);
-
-    const { recipe } = data.data;
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
-    };
+    state.recipe = createRecipeObject(data);
 
     if (state.bookmarks.some(bookmark => bookmark.id === id))
       setRecipeBookmark(true);
@@ -101,15 +107,50 @@ function setRecipeBookmark(bool) {
   state.recipe.bookmarked = bool;
 }
 
+export async function uploadRecipe(newRecipe) {
+  try {
+    console.log(newRecipe);
+    // 1) Turn newRecipe data into format that API will accept
+    const ingredients = Object.entries(newRecipe)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ing => {
+        const ingArr = ing[1].replaceAll(' ', '').split(',');
+        if (ingArr.length !== 3)
+          throw new Error('Wrong ingredient format! Please use correct format');
+        const [quantity, unit, description] = ing[1]
+          .replaceAll(' ', '')
+          .split(',');
+        return { quantity: quantity ? +quantity : null, unit, description };
+      });
+
+    const recipe = {
+      title: newRecipe.title,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      publisher: newRecipe.publisher,
+      cooking_time: +newRecipe.cookingTime,
+      servings: +newRecipe.servings,
+      ingredients,
+    };
+    console.log(recipe);
+    // 2) Submit formatted data to API for posting
+    const data = await sendJSON(`${API_URL}?key=${KEY}`, recipe);
+    state.recipe = createRecipeObject(data);
+    addBookmark(state.recipe);
+  } catch (err) {
+    throw err;
+  }
+}
+
+// TODO: Remove prior to push to production
+// For clearing bookmarks during app development
+function clearBookmarks() {
+  localStorage.clear('bookmarks');
+}
+// clearBookmarks();
+
 function init() {
   const storage = localStorage.getItem('bookmarks');
   if (storage) state.bookmarks = JSON.parse(storage);
 }
 init();
-
-// TODO: Remove prior to push to production
-// // For clearing bookmarks during app development
-// function clearBookmarks() {
-//   localStorage.clear('bookmarks');
-// }
-// clearBookmarks();
